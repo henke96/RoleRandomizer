@@ -94,13 +94,19 @@
 			}
 		}
 	}
+	function enableAll() {
+		for (let i = 0; i < 5; ++i) {
+			for (let j = 0; j < 5; ++j) {
+				checkboxInputs[i][j].checked = true;
+			}
+		}
+	}
 	function removePrevious() {
 		for (let i = 0; i < 5; ++i) {
 			let name = resultDatas[i].innerHTML;
 			if (name.length > 0) {
 				for (let j = 0; j < 5; ++j) {
 					if (nameInputs[j].value == name) {
-						if (i == 1 && name == "-" && j == 4) continue;
 						checkboxInputs[j][i].checked = false;
 					}
 				}
@@ -108,7 +114,6 @@
 		}
 	}
 	function leechMode() {
-		nameInputs[4].value = "-";
 		for (let i = 0; i < 5; ++i) {
 			checkboxInputs[4][i].checked = false;
 		}
@@ -160,6 +165,8 @@
 		</table>
 		<button id="randomize" tabIndex="6" onclick="solve()">Randomize!</button>
 		<button onclick="removePrevious()">Remove previous roles</button>
+		<br>
+		<button onclick="enableAll()">Reset roles</button>
 		<button onclick="leechMode()">Leech mode</button>
 	</div>
 </body>
