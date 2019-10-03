@@ -33,6 +33,15 @@
 					input.size = "10";
 					input.tabIndex = i + 1;
 					nameInputs[i] = input;
+					input.addEventListener("keypress", function(event) {
+						if (event.keyCode === 13) {
+							if (i < 4) {
+								nameInputs[i + 1].focus();
+							} else {
+								document.getElementById("randomize").focus();
+							}
+						}
+					});
 				} else {
 					input.type = "checkbox";
 					input.checked = true;
@@ -104,6 +113,16 @@
 			}
 		}
 	}
+	function leechMode() {
+		nameInputs[4].value = "-";
+		for (let i = 0; i < 5; ++i) {
+			checkboxInputs[4][i].checked = false;
+		}
+		for (let i = 0; i < 5; ++i) {
+			checkboxInputs[i][1].checked = false;
+		}
+		checkboxInputs[4][1].checked = true;
+	}
 </script>
 <style>
 	table, th, td {
@@ -126,7 +145,7 @@
 		text-align: center;
 	}
 	#randomize {
-		font-weight: bold; 
+		font-weight: bold;
 	}
 </style>
 <body>
@@ -144,6 +163,8 @@
 		</table>
 		<button id="randomize" tabIndex="6" onclick="solve()">Randomize!</button>
 		<button onclick="removePrevious()">Remove previous roles</button>
+		<br>
 		<button onclick="enableAll()">Enable all roles</button>
+		<button onclick="leechMode()">Leech mode</button>
 	</div>
 </body>
