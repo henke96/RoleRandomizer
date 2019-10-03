@@ -100,6 +100,7 @@
 			if (name.length > 0) {
 				for (let j = 0; j < 5; ++j) {
 					if (nameInputs[j].value == name) {
+						if (i == 1 && name == "-" && j == 4) continue;
 						checkboxInputs[j][i].checked = false;
 					}
 				}
