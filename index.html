@@ -106,13 +106,6 @@
 			}
 		}
 	}
-	function enableAll() {
-		for (let i = 0; i < 5; ++i) {
-			for (let j = 0; j < 5; ++j) {
-				checkboxInputs[i][j].checked = true;
-			}
-		}
-	}
 	function leechMode() {
 		nameInputs[4].value = "-";
 		for (let i = 0; i < 5; ++i) {
@@ -166,8 +159,6 @@
 		</table>
 		<button id="randomize" tabIndex="6" onclick="solve()">Randomize!</button>
 		<button onclick="removePrevious()">Remove previous roles</button>
-		<br>
-		<button onclick="enableAll()">Enable all roles</button>
 		<button onclick="leechMode()">Leech mode</button>
 	</div>
 </body>
