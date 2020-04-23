@@ -4,8 +4,10 @@
 	let htmlTable;
 	let htmlTableHeaderRow;
 	let htmlTableBodyRows;
+	let htmlTable5thRow;
 	let roleResults = null;
-	const roles = ["a", "2", "h", "c", "d"];
+	const funRoles = ["a", "2", "h", "c", "d"];
+	const leechRoles = ["a", "c", "h", "d"];
 	const nameInputs = [];
 	const roleInputs = [];
 	const resultDatas = [];
@@ -13,6 +15,7 @@
 		htmlTable = document.getElementById("table");
 		htmlTableHeaderRow = htmlTable.firstElementChild.firstElementChild;
 		htmlTableBodyRows = htmlTable.children[1].getElementsByTagName("tr");
+		htmlTable5thRow = htmlTableBodyRows[4];
 		generateTables();
 	}
 	function generateTables() {
@@ -46,20 +49,27 @@
 			resetRoles(i);
 		}
 		resultData = document.getElementById("result");
+		checkLeech();
 	}
 	function solve() {
+		let leech = isLeech();
 		let possible = [];
-		for (let i = 0; i < 5; ++i) {
+		let roles = leech ? leechRoles : funRoles;
+		for (let i = 0; i < roles.length; ++i) {
 			if (roleInputs[0].value.toLowerCase().indexOf(roles[i]) < 0) continue;
-			for (let j = 0; j < 5; ++j) {
+			for (let j = 0; j < roles.length; ++j) {
 				if (j == i || roleInputs[1].value.toLowerCase().indexOf(roles[j]) < 0) continue;
-				for (let k = 0; k < 5; ++k) {
+				for (let k = 0; k < roles.length; ++k) {
 					if (k == i || k == j || roleInputs[2].value.toLowerCase().indexOf(roles[k]) < 0) continue;
-					for (let l = 0; l < 5; ++l) {
+					for (let l = 0; l < roles.length; ++l) {
 						if (l == i || l == j || l == k || roleInputs[3].value.toLowerCase().indexOf(roles[l]) < 0) continue;
-						for (let m = 0; m < 5; ++m) {
-							if (m == i || m == j || m == k || m == l || roleInputs[4].value.toLowerCase().indexOf(roles[m]) < 0) continue;
-							possible.push([i, j, k, l, m]);
+						if (leech) {
+							possible.push([i, j, k, l]);
+						} else {
+							for (let m = 0; m < roles.length; ++m) {
+								if (m == i || m == j || m == k || m == l || roleInputs[4].value.toLowerCase().indexOf(roles[m]) < 0) continue;
+								possible.push([i, j, k, l, m]);
+							}
 						}
 					}
 				}
@@ -69,13 +79,13 @@
 			let chosenIndex = Math.floor(Math.random() * possible.length);
 			roleResults = possible[chosenIndex];
 			let result = "";
-			for (let i = 0; i < 5; ++i) {
-				for (let j = 0; j < 5; ++j) {
+			for (let i = 0; i < roles.length; ++i) {
+				for (let j = 0; j < roles.length; ++j) {
 					if (roleResults[j] == i) {
 						let name = nameInputs[j].value
 						if (!name) name = "_";
 						result += name;
-						if (i < 4) result += " ";
+						if (i < roles.length - 1) result += " ";
 						break;
 					}
 				}
@@ -86,16 +96,35 @@
 		}
 	}
 	function resetRoles(i) {
-		roleInputs[i].value = "a2hcd";
+		if (isLeech()) {
+			roleInputs[i].value = "achd";
+		} else {
+			roleInputs[i].value = "a2hcd";
+		}
 	}
 	function removePrevious() {
 		if (!roleResults) return;
-
-		for (let i = 0; i < 5; ++i) {
+		let roles = isLeech() ? leechRoles : funRoles;
+		for (let i = 0; i < roles.length; ++i) {
 			let roleChar = roles[roleResults[i]];
 			roleInputs[i].value = roleInputs[i].value.replace(new RegExp(roleChar, "gi"), "");
 		}
 	}
+	function isLeech() {
+		return document.getElementById("leech").checked;
+	}
+	function checkLeech() {
+		let leech = isLeech();
+		if (leech) {
+			htmlTable5thRow.style.display = "none";
+		} else {
+			htmlTable5thRow.style.display = "";
+		}
+		for (let i = 0; i < 5; ++i) {
+			resetRoles(i);
+		}
+	}
+
 </script>
 <style>
 	table, th, td {
@@ -142,5 +171,10 @@
 		</table>
 		<button id="randomize" tabIndex="11" onclick="solve()">Randomize!</button>
 		<button onclick="removePrevious()">Remove Previous</button>
+		<br>
+		<label>
+			<input type="checkbox" id="leech" onclick="checkLeech()">
+			Leech
+		</label>
 	</div>
 </body>
