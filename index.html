@@ -38,13 +38,14 @@
 			fillInput.type = "button";
 			fillInput.value = "R";
 			fillInput.onclick = function() {
-				roleInputs[i].value = "a2hcd";
+				resetRoles(i);
 			}
 			roleData.append(roleInput);
 			roleData.append(fillInput);
 			row.append(nameData);
 			row.append(roleData);
 			if (i == 0) nameData.focus();
+			resetRoles(i);
 		}
 		for (let i = 0; i < 2; ++i) {
 			let data;
@@ -58,7 +59,6 @@
 			data.colSpan = 3;
 			htmlTableFooterRows[i].append(data);
 		}
-		resetRoles();
 	}
 	function solve() {
 		let possible = [];
@@ -98,10 +98,8 @@
 			resultData.innerHTML = "Impossible!"
 		}
 	}
-	function resetRoles() {
-		for (let i = 0; i < 5; ++i) {
-			roleInputs[i].value = "a2hcd";
-		}
+	function resetRoles(i) {
+		roleInputs[i].value = "a2hcd";
 	}
 	function removePrevious() {
 		if (!roleResults) return;
