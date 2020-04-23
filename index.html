@@ -85,7 +85,9 @@
 			for (let i = 0; i < 5; ++i) {
 				for (let j = 0; j < 5; ++j) {
 					if (roleResults[j] == i) {
-						result += nameInputs[j].value
+						let name = nameInputs[j].value
+						if (!name) name = "_";
+						result += name;
 						if (i < 4) result += " ";
 						break;
 					}
