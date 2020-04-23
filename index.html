@@ -20,33 +20,31 @@
 	function generateTables() {
 		for (let i = 0; i < 5; ++i) {
 			let row = htmlTableBodyRows[i];
-			for (let j = 0; j < 2; ++j) {
-				let data = document.createElement("td");
-				let input = document.createElement("input");
-				input.type = "text";
-				if (j == 0) {
-					input.size = "10";
-					input.tabIndex = i + 1;
-					nameInputs[i] = input;
-					input.addEventListener("keypress", function(event) {
-						if (event.keyCode === 13) {
-							if (i < 4) {
-								nameInputs[i + 1].focus();
-							} else {
-								document.getElementById("randomize").click();
-								document.getElementById("randomize").focus();
-							}
-						}
-					});
-				} else {
-					input.size = "5";
-					input.tabIndex = i + 6;
-					roleInputs[i] = input;
-				}
-				data.append(input);
-				row.append(data);
-				if (i == 0 && j == 0) input.focus();
+			let nameData = document.createElement("td");
+			let nameInput = document.createElement("input");
+			nameInput.type = "text";
+			nameInput.size = "10";
+			nameInput.tabIndex = i + 1;
+			nameInputs[i] = nameInput;
+			nameData.append(nameInput);
+
+			let roleData = document.createElement("td");
+			let roleInput = document.createElement("input");
+			roleInput.size = "5";
+			roleInput.type = "text";
+			roleInput.tabIndex = i + 6;
+			roleInputs[i] = roleInput;
+			let fillInput = document.createElement("input");
+			fillInput.type = "button";
+			fillInput.value = "R";
+			fillInput.onclick = function() {
+				roleInputs[i].value = "a2hcd";
 			}
+			roleData.append(roleInput);
+			roleData.append(fillInput);
+			row.append(nameData);
+			row.append(roleData);
+			if (i == 0) nameData.focus();
 		}
 		for (let i = 0; i < 2; ++i) {
 			let data;
@@ -57,7 +55,7 @@
 				data = document.createElement("td");
 				resultData = data;
 			}
-			data.colSpan = 2;
+			data.colSpan = 3;
 			htmlTableFooterRows[i].append(data);
 		}
 		resetRoles();
@@ -124,8 +122,8 @@
 		text-align: center;
 	}
 	button {
-		margin-top: 5px;
-		margin-right: 5px;
+		margin-right: 4px;
+		margin-top: 4px;
 		padding: 2px;
 	}
 	#content {
@@ -136,6 +134,9 @@
 	}
 	input[type="text"] {
 		text-align: center;
+	}
+	input[type="button"] {
+		margin-left: 4px;
 	}
 </style>
 <body>
@@ -155,8 +156,6 @@
 			</tfoot>
 		</table>
 		<button id="randomize" tabIndex="11" onclick="solve()">Randomize!</button>
-		<button onclick="resetRoles()">Reset roles</button>
-		<br>
-		<button onclick="removePrevious()">Remove previous roles</button>
+		<button onclick="removePrevious()">Remove Previous</button>
 	</div>
 </body>
