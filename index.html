@@ -4,32 +4,27 @@
 	let htmlTable;
 	let htmlTableHeaderRow;
 	let htmlTableBodyRows;
-	let htmlTableFooterRow;
+	let htmlTableFooterRows;
+	let roleResults = null;
+	const roles = ["a", "2", "h", "c", "d"];
 	const nameInputs = [];
-	const checkboxInputs = [];
+	const roleInputs = [];
 	const resultDatas = [];
 	window.onload = function() {
 		htmlTable = document.getElementById("table");
 		htmlTableHeaderRow = htmlTable.firstElementChild.firstElementChild;
 		htmlTableBodyRows = htmlTable.children[1].getElementsByTagName("tr");
-		htmlTableFooterRow = htmlTable.children[2].firstElementChild;
+		htmlTableFooterRows = htmlTable.children[2].getElementsByTagName("tr");
 		generateTables();
 	}
 	function generateTables() {
-		let headers = ["Name", "Main attacker", "2nd attacker", "Healer", "Collector", "Defender"];
-		for (let i = 0; i < 6; ++i) {
-			let header = document.createElement("th");
-			header.innerHTML = headers[i];
-			htmlTableHeaderRow.append(header);
-		}
-		for (let i = 0; i < htmlTableBodyRows.length; ++i) {
+		for (let i = 0; i < 5; ++i) {
 			let row = htmlTableBodyRows[i];
-			checkboxInputs[i] = [];
-			for (let j = 0; j < 6; ++j) {
+			for (let j = 0; j < 2; ++j) {
 				let data = document.createElement("td");
 				let input = document.createElement("input");
+				input.type = "text";
 				if (j == 0) {
-					input.type = "text";
 					input.size = "10";
 					input.tabIndex = i + 1;
 					nameInputs[i] = input;
@@ -44,39 +39,41 @@
 						}
 					});
 				} else {
-					input.type = "checkbox";
-					input.checked = true;
-					checkboxInputs[i][j - 1] = input;
+					input.size = "5";
+					input.tabIndex = i + 6;
+					roleInputs[i] = input;
 				}
 				data.append(input);
 				row.append(data);
 				if (i == 0 && j == 0) input.focus();
 			}
 		}
-		for (let i = 0; i < 6; ++i) {
+		for (let i = 0; i < 2; ++i) {
 			let data;
 			if (i == 0) {
 				data = document.createElement("th");
 				data.innerHTML = "Result";
 			} else {
 				data = document.createElement("td");
-				resultDatas[i - 1] = data;
+				resultData = data;
 			}
-			htmlTableFooterRow.append(data);
+			data.colSpan = 2;
+			htmlTableFooterRows[i].append(data);
 		}
+		resetRoles();
 	}
 	function solve() {
 		let possible = [];
 		for (let i = 0; i < 5; ++i) {
-			if (!checkboxInputs[0][i].checked) continue;
+			if (roleInputs[0].value.toLowerCase().indexOf(roles[i]) < 0) continue;
 			for (let j = 0; j < 5; ++j) {
-				if (j == i || !checkboxInputs[1][j].checked) continue;
+				if (j == i || roleInputs[1].value.toLowerCase().indexOf(roles[j]) < 0) continue;
 				for (let k = 0; k < 5; ++k) {
-					if (k == i || k == j || !checkboxInputs[2][k].checked) continue;
+					if (k == i || k == j || roleInputs[2].value.toLowerCase().indexOf(roles[k]) < 0) continue;
 					for (let l = 0; l < 5; ++l) {
-						if (l == i || l == j || l == k || !checkboxInputs[3][l].checked) continue;
+						if (l == i || l == j || l == k || roleInputs[3].value.toLowerCase().indexOf(roles[l]) < 0) continue;
 						for (let m = 0; m < 5; ++m) {
-							if (m == i || m == j || m == k || m == l || !checkboxInputs[4][m].checked) continue;
+							if (m == i || m == j || m == k || m == l || roleInputs[4].value.toLowerCase().indexOf(roles[m]) < 0) continue;
 							possible.push([i, j, k, l, m]);
 						}
 					}
@@ -85,41 +82,34 @@
 		}
 		if (possible.length > 0) {
 			let chosenIndex = Math.floor(Math.random() * possible.length);
-			let chosen = possible[chosenIndex];
+			roleResults = possible[chosenIndex];
+			let result = "";
 			for (let i = 0; i < 5; ++i) {
-				resultDatas[chosen[i]].innerHTML = nameInputs[i].value;
-			}
-		} else {
-			for (let i = 0; i < 5; ++i) {
-				resultDatas[i].innerHTML = "Impossible!"
-			}
-		}
-	}
-	function enableAll() {
-		for (let i = 0; i < 5; ++i) {
-			for (let j = 0; j < 5; ++j) {
-				checkboxInputs[i][j].checked = true;
-			}
-		}
-	}
-	function removePrevious() {
-		for (let i = 0; i < 5; ++i) {
-			let name = resultDatas[i].innerHTML;
-			if (name.length > 0) {
 				for (let j = 0; j < 5; ++j) {
-					if (nameInputs[j].value == name) {
-						checkboxInputs[j][i].checked = false;
+					if (roleResults[j] == i) {
+						result += nameInputs[j].value
+						if (i < 4) result += " ";
+						break;
 					}
 				}
 			}
+			resultData.innerHTML = result;
+		} else {
+			resultData.innerHTML = "Impossible!"
 		}
 	}
-	function leechMode() {
-		nameInputs[4].value = "";
+	function resetRoles() {
 		for (let i = 0; i < 5; ++i) {
-			checkboxInputs[i][1].checked = false;
+			roleInputs[i].value = "a2hcd";
 		}
-		checkboxInputs[4][1].checked = true;
+	}
+	function removePrevious() {
+		if (!roleResults) return;
+
+		for (let i = 0; i < 5; ++i) {
+			let roleChar = roles[roleResults[i]];
+			roleInputs[i].value = roleInputs[i].value.replace(new RegExp(roleChar, "gi"), "");
+		}
 	}
 </script>
 <style>
@@ -140,7 +130,6 @@
 	}
 	#content {
 		display: inline-block;
-		text-align: center;
 	}
 	#randomize {
 		font-weight: bold;
@@ -153,19 +142,21 @@
 	<div id="content">
 		<table id="table">
 			<thead>
-				<tr></tr>
+				<tr>
+					<th>Name</th>
+					<th>Roles</th>
+				</tr>
 			</thead>
 			<tbody>
 				<tr></tr><tr></tr><tr></tr><tr></tr><tr></tr>
 			</tbody>
 			<tfoot>
-				<tr></tr>
+				<tr></tr><tr></tr>
 			</tfoot>
 		</table>
-		<button id="randomize" tabIndex="6" onclick="solve()">Randomize!</button>
-		<button onclick="removePrevious()">Remove previous roles</button>
+		<button id="randomize" tabIndex="11" onclick="solve()">Randomize!</button>
+		<button onclick="resetRoles()">Reset roles</button>
 		<br>
-		<button onclick="enableAll()">Reset roles</button>
-		<button onclick="leechMode()">Leech mode</button>
+		<button onclick="removePrevious()">Remove previous roles</button>
 	</div>
 </body>
