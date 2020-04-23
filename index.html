@@ -4,7 +4,6 @@
 	let htmlTable;
 	let htmlTableHeaderRow;
 	let htmlTableBodyRows;
-	let htmlTableFooterRows;
 	let roleResults = null;
 	const roles = ["a", "2", "h", "c", "d"];
 	const nameInputs = [];
@@ -14,7 +13,6 @@
 		htmlTable = document.getElementById("table");
 		htmlTableHeaderRow = htmlTable.firstElementChild.firstElementChild;
 		htmlTableBodyRows = htmlTable.children[1].getElementsByTagName("tr");
-		htmlTableFooterRows = htmlTable.children[2].getElementsByTagName("tr");
 		generateTables();
 	}
 	function generateTables() {
@@ -47,18 +45,7 @@
 			if (i == 0) nameData.focus();
 			resetRoles(i);
 		}
-		for (let i = 0; i < 2; ++i) {
-			let data;
-			if (i == 0) {
-				data = document.createElement("th");
-				data.innerHTML = "Result";
-			} else {
-				data = document.createElement("td");
-				resultData = data;
-			}
-			data.colSpan = 3;
-			htmlTableFooterRows[i].append(data);
-		}
+		resultData = document.getElementById("result");
 	}
 	function solve() {
 		let possible = [];
@@ -150,10 +137,8 @@
 			</thead>
 			<tbody>
 				<tr></tr><tr></tr><tr></tr><tr></tr><tr></tr>
+				<tr><th colspan="2">Result</th></tr><tr><td id="result" colspan="2"></td></tr>
 			</tbody>
-			<tfoot>
-				<tr></tr><tr></tr>
-			</tfoot>
 		</table>
 		<button id="randomize" tabIndex="11" onclick="solve()">Randomize!</button>
 		<button onclick="removePrevious()">Remove Previous</button>
