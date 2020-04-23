@@ -77,13 +77,15 @@
 		}
 		if (possible.length > 0) {
 			let chosenIndex = Math.floor(Math.random() * possible.length);
-			roleResults = possible[chosenIndex];
+			let chosen = possible[chosenIndex];
+			roleResults = [];
 			let result = "";
 			for (let i = 0; i < roles.length; ++i) {
 				for (let j = 0; j < roles.length; ++j) {
-					if (roleResults[j] == i) {
+					if (chosen[j] == i) {
 						let name = nameInputs[j].value
 						if (!name) name = "_";
+						roleResults[j] = { name: name, role: i };
 						result += name;
 						if (i < roles.length - 1) result += " ";
 						break;
@@ -106,7 +108,8 @@
 		if (!roleResults) return;
 		let roles = isLeech() ? leechRoles : funRoles;
 		for (let i = 0; i < roles.length; ++i) {
-			let roleChar = roles[roleResults[i]];
+			if (nameInputs[i].value != roleResults[i].name) continue;
+			let roleChar = roles[roleResults[i].role];
 			roleInputs[i].value = roleInputs[i].value.replace(new RegExp(roleChar, "gi"), "");
 		}
 	}
@@ -123,6 +126,7 @@
 		for (let i = 0; i < 5; ++i) {
 			resetRoles(i);
 		}
+		roleResults = null;
 	}
 
 </script>
