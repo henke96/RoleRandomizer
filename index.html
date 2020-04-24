@@ -25,7 +25,7 @@
 			let nameInput = document.createElement("input");
 			nameInput.type = "text";
 			nameInput.size = "10";
-			nameInput.tabIndex = i + 1;
+			nameInput.tabIndex = 2 * i + 1;
 			nameInputs[i] = nameInput;
 			nameData.append(nameInput);
 
@@ -33,7 +33,7 @@
 			let roleInput = document.createElement("input");
 			roleInput.size = "5";
 			roleInput.type = "text";
-			roleInput.tabIndex = i + 6;
+			roleInput.tabIndex = 2 * i + 2;
 			roleInputs[i] = roleInput;
 			let fillInput = document.createElement("input");
 			fillInput.type = "button";
