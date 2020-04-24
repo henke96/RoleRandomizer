@@ -26,6 +26,17 @@
 			nameInput.type = "text";
 			nameInput.size = "10";
 			nameInput.tabIndex = 2 * i + 1;
+			nameInput.addEventListener("keypress", function(event) {
+				if (event.keyCode === 13) {
+					if (i < 4) {
+						nameInputs[i + 1].focus();
+						nameInputs[i + 1].select();
+					} else {
+						roleInputs[0].focus();
+						roleInputs[0].select();
+					}
+				}
+			});
 			nameInputs[i] = nameInput;
 			nameData.append(nameInput);
 
@@ -34,6 +45,16 @@
 			roleInput.size = "5";
 			roleInput.type = "text";
 			roleInput.tabIndex = 2 * i + 2;
+			roleInput.addEventListener("keypress", function(event) {
+				if (event.keyCode === 13) {
+					if (i < 4) {
+						roleInputs[i + 1].focus();
+						roleInputs[i + 1].select();
+					} else {
+						document.getElementById("randomize").focus();
+					}
+				}
+			});
 			roleInputs[i] = roleInput;
 			let fillInput = document.createElement("input");
 			fillInput.type = "button";
