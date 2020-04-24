@@ -28,7 +28,8 @@
 			nameInput.tabIndex = 2 * i + 1;
 			nameInput.addEventListener("keypress", function(event) {
 				if (event.keyCode === 13) {
-					if (i < 4) {
+					let last = isLeech() ? 3 : 4;
+					if (i < last) {
 						nameInputs[i + 1].focus();
 						nameInputs[i + 1].select();
 					} else {
@@ -47,7 +48,8 @@
 			roleInput.tabIndex = 2 * i + 2;
 			roleInput.addEventListener("keypress", function(event) {
 				if (event.keyCode === 13) {
-					if (i < 4) {
+					let last = isLeech() ? 3 : 4;
+					if (i < last) {
 						roleInputs[i + 1].focus();
 						roleInputs[i + 1].select();
 					} else {
