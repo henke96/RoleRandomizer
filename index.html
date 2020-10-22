@@ -51,6 +51,14 @@
 		resultData = document.getElementById("result");
 		checkLeech();
 	}
+	function getHealerIndex(player) {
+		let index = 0;
+		for (let i = 0; i < player; ++i) {
+			if (roleInputs[i].value.toLowerCase().indexOf("h") < 0) continue;
+			++index;
+		}
+		return index;
+	}
 	function solve() {
 		let leech = isLeech();
 		let possible = [];
@@ -73,6 +81,35 @@
 						}
 					}
 				}
+			}
+		}
+		if (isFair()) {
+			possiblePerHealer = []
+			let numHealers = getHealerIndex(isLeech() ? 4 : 5);
+			for (let i = 0; i < numHealers; ++i) {
+				possiblePerHealer[i] = []
+			}
+			for (let i = 0; i < possible.length; ++i) {
+				let current = possible[i];
+				for (let player = 0; player < current.length; ++player) {
+					if (current[player] === roles.indexOf("h")) {
+						possiblePerHealer[getHealerIndex(player)].push(current)
+						break;
+					}
+				}
+			}
+			let allCanHeal = true;
+			for (let i = 0; i < numHealers; ++i) {
+				if (possiblePerHealer[i].length === 0) {
+					allCanHeal = false;
+					console.log("Healer " + i + " cant get heal");
+				}
+			}
+			if (allCanHeal) {
+				let chosenHealer = Math.floor(Math.random() * numHealers);
+				possible = possiblePerHealer[chosenHealer];
+			} else {
+				possible = [];
 			}
 		}
 		if (possible.length > 0) {
@@ -128,7 +165,9 @@
 		}
 		roleResults = null;
 	}
-
+	function isFair() {
+		return document.getElementById("fair").checked;
+	}
 </script>
 <style>
 	table, th, td {
@@ -179,6 +218,10 @@
 		<label>
 			<input type="checkbox" id="leech" onclick="checkLeech()">
 			Leech
+		</label>
+		<label title="Makes sure that every player who wants to heal has an equal chance of getting it">
+			<input type="checkbox" id="fair">
+			Equal heal chances
 		</label>
 	</div>
 </body>
