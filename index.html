@@ -83,7 +83,7 @@
 				}
 			}
 		}
-		if (isFair()) {
+		if (possible.length > 0 && isFair()) {
 			possiblePerHealer = []
 			let numHealers = getHealerIndex(isLeech() ? 4 : 5);
 			for (let i = 0; i < numHealers; ++i) {
